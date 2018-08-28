@@ -1,0 +1,86 @@
+<toolset>
+    <pathSet base="scripts/2018.0302">
+        <pathVar  name="split.script" path="split_parallel_jobs.py"/>
+        <toolPath tool="param-medic"  path="run_sequential_jobs.py"/>
+        <toolPath tool="mergeLogs"    path="CCMSWorkflowUtils.jar"/>
+    </pathSet>
+    
+    <pathSet base="/opt/python-2.7.3/bin">
+        <pathVar  name="python.script"         path="python"/>
+        <toolPath tool="split_param-medic"     path="python"/>
+        <toolPath tool="summarize_param-medic" path="python"/>
+    </pathSet>
+    
+    <pathSet base="param-medic/0.2">
+        <pathVar name="param-medic.script"           path="param-medic_wrapper.py"/>
+        <pathVar name="summarize_param-medic.script" path="merge_param_medic.py"/>
+    </pathSet>
+    
+    <tool name="split_param-medic">
+        <require name="input"  type="folder"/>
+        <produce name="output" type="folder"/>
+
+        <execution env="binary" argConvention="adhoc">
+            <arg pathRef="split.script"/>
+            <arg valueRef="input"/>
+            <arg valueRef="output"/>
+            <arg value="40"/>
+            <arg pathRef="python.script"/>
+            <arg pathRef="param-medic.script"/>
+            <arg value="i?"/>
+            <arg value="o?"/>
+            <arg value="l?"/>
+            <arg value="true"/>
+            <arg option="min-precursor-mz"        valueRef="@min-precursor-mz"        ifEmpty="skip"/>
+            <arg option="max-precursor-mz"        valueRef="@max-precursor-mz"        ifEmpty="skip"/>
+            <arg option="min-frag-mz"             valueRef="@min-frag-mz"             ifEmpty="skip"/>
+            <arg option="max-frag-mz"             valueRef="@max-frag-mz"             ifEmpty="skip"/>
+            <arg option="max-precursor-delta-ppm" valueRef="@max-precursor-delta-ppm" ifEmpty="skip"/>
+            <arg option="charges"                 valueRef="@charges"                 ifEmpty="skip"/>
+            <arg option="max-scan-separation"     valueRef="@max-scan-separation"     ifEmpty="skip"/>
+            <arg option="min-peak-pairs"          valueRef="@min-peak-pairs"          ifEmpty="skip"/>
+            <arg option="min-scan-frag-peaks"     valueRef="@min-scan-frag-peaks"     ifEmpty="skip"/>
+            <arg option="top-n-frag-peaks"        valueRef="@top-n-frag-peaks"        ifEmpty="skip"/>
+            <arg option="min-common-frag-peaks"   valueRef="@min-common-frag-peaks"   ifEmpty="skip"/>
+            <arg option="pair-top-n-frag-peaks"   valueRef="@pair-top-n-frag-peaks"   ifEmpty="skip"/>
+        </execution>
+    </tool>
+    
+    <tool name="param-medic">
+        <require name="input"   type="file"/>
+        <require name="spectra" type="folder"/>
+        <produce name="output"  type="folder"/>
+
+        <execution env="python" argConvention="posix">
+            <arg valueRef="input"/>
+            <arg valueRef="output"/>
+            <arg valueRef="##{LOG}"/>
+        </execution>
+    </tool>
+    
+    <tool name="mergeLogs">
+        <require name="input"  type="folder"/>
+        <produce name="output" type="file" naming="fixed" value="param-medic.log"/>
+        
+        <execution env="java" argConvention="gnu">
+                <mainClass name="edu.ucsd.workflow.MergeRectangular"/>
+                <envArg option="Xmx512M"/>
+                <arg option="input"  valueRef="input"/>
+                <arg option="output" valueRef="output"/>
+        </execution>
+    </tool>
+    
+    <tool name="summarize_param-medic">
+        <require name="input"   type="folder"/>
+        <produce name="output"  type="file" naming="explicit"/>
+        <produce name="summary" type="file" naming="fixed" value="summary.tsv"/>
+
+        <execution env="binary" argConvention="adhoc">
+                <arg pathRef="summarize_param-medic.script"/>
+                <arg valueRef="input"/>
+                <arg valueRef="@param_medic_mod_percent"/>
+                <arg valueRef="output"/>
+                <arg valueRef="summary"/>
+        </execution>
+    </tool>
+</toolset>

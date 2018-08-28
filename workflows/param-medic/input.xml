@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<interface id="param-medic" version="1.3.0">
+    <workflow-id>PARAM-MEDIC</workflow-id>
+    <workflow-label>Param-Medic</workflow-label>
+
+    <!-- Parameter declarations -->
+    <parameters>
+    	<!-- Required parameters -->
+        <parameter name="spec_on_server" label="mzML Files">
+	    <validator type="required"/>
+	    <fileGenerator type="upload" purpose="spectrum" target="spec"/>
+	</parameter>
+	<!-- Advanced Param-Medic command line parameters -->
+	<parameter name="min-precursor-mz" label="Minimum Precursor m/z Value">
+	    <validator type="float" required="false"/>
+	    <default   value="400"/>
+	</parameter>
+	<parameter name="max-precursor-mz" label="Maximum Precursor m/z Value">
+	    <validator type="float" required="false"/>
+	    <default   value="1800"/>
+	</parameter>
+	<parameter name="min-frag-mz" label="Minimum Fragment m/z Value">
+	    <validator type="float" required="false"/>
+	    <default   value="150"/>
+	</parameter>
+	<parameter name="max-frag-mz" label="Maximum Fragment m/z Value">
+	    <validator type="float" required="false"/>
+	    <default   value="1800"/>
+	</parameter>
+	<parameter name="max-precursor-delta-ppm" label="Maximum Precursor Delta (ppm)">
+	    <validator type="float" required="false"/>
+	    <default   value="50"/>
+	</parameter>
+	<parameter name="charges" label="Precursor Charge State to Consider">
+	    <validator type="required"/>
+	    <default   value="0,2,3,4"/>
+	</parameter>
+	<parameter name="max-scan-separation" label="Maximum Scan Separation">
+	    <validator type="integer" required="false"/>
+	    <default   value="1000"/>
+	</parameter>
+	<parameter name="min-peak-pairs" label="Minimum Peak Pairs">
+	    <validator type="integer" required="false"/>
+	    <default   value="100"/>
+	</parameter>
+	<parameter name="min-scan-frag-peaks" label="Minimum Scan Fragment Peaks">
+	    <validator type="integer" required="false"/>
+	    <default   value="40"/>
+	</parameter>
+	<parameter name="top-n-frag-peaks" label="Number of Most-Intense Fragment Peaks to Consider">
+	    <validator type="integer" required="false"/>
+	    <default   value="30"/>
+	</parameter>
+	<parameter name="min-common-frag-peaks" label="Minimum Common Fragment Peaks">
+	    <validator type="integer" required="false"/>
+	    <default   value="20"/>
+	</parameter>
+	<parameter name="pair-top-n-frag-peaks" label="Number of Fragment Peaks Per Spectrum Pair">
+	    <validator type="integer" required="false"/>
+	    <default   value="5"/>
+	</parameter>
+	<!-- Param-Medic summary script parameters -->
+	<parameter name="param_medic_mod_percent" label="Percent Files to Include Mod">
+	    <validator type="float" minimum="0" maximum="100" required="true"/>
+	    <default   value="80"/>
+	</parameter>
+    </parameters>
+
+    <!-- Input form layout -->
+    <block label="Basic Selection">
+        <row>
+            <cell>
+	        <label>
+	            <content parameter="spec_on_server"/>
+		    <tooltip id="hSpectrumFile"/>
+		</label>
+	    </cell>
+	    <cell>
+	        <module id="spec_on_server" type="fileSelector">
+	            <property name="label">mzML Files</property>
+		</module>
+	    </cell>
+        </row>
+    </block>
+    <block label="Advanced Param-Medic Parameters">
+        <row>
+            <cell>
+                <label>
+                    <content parameter="min-precursor-mz"/>
+                    <tooltip id="hmin-precursor-mz">
+                        Minimum precursor m/z value to use in measurement error estimation.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="min-precursor-mz">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+            <cell>
+                <label>
+                    <content parameter="max-precursor-mz"/>
+                    <tooltip id="hmax-precursor-mz">
+                        Maximum precursor m/z value to use in measurement error estimation.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="max-precursor-mz">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+            <cell>
+                <label>
+                    <content parameter="min-frag-mz"/>
+                    <tooltip id="hmin-frag-mz">
+                        Minimum fragment m/z value to use in measurement error estimation.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="min-frag-mz">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+            <cell>
+                <label>
+                    <content parameter="max-frag-mz"/>
+                    <tooltip id="hmax-frag-mz">
+                        Maximum fragment m/z value to use in measurement error estimation.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="max-frag-mz">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+        </row>
+        <row>
+            <cell>
+                <label>
+                    <content parameter="max-precursor-delta-ppm"/>
+                    <tooltip id="hmax-precursor-delta-ppm">
+                        Maximum ppm distance between precursor m/z values to consider two scans
+                        potentially generated by the same peptide for measurement error estimation.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="max-precursor-delta-ppm">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+            <cell>
+                <label>
+                    <content parameter="charges"/>
+                    <tooltip id="hcharges">
+                        Comma-delimited list of precursor charge states to consider MS/MS spectra from,
+                        in measurement error estimation. Ideally, this should include the most frequently
+                        occurring charge state in the given data.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="charges">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+            <cell>
+                <label>
+                    <content parameter="max-scan-separation"/>
+                    <tooltip id="hmax-scan-separation">
+                        Maximum number of scans two spectra can be separated by in order to be
+                        considered potentially generated by the same peptide, for measurement error
+                        estimation.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="max-scan-separation">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+            <cell>
+                <label>
+                    <content parameter="min-peak-pairs"/>
+                    <tooltip id="hmin-peak-pairs">
+                        Minimum number of peak pairs (for precursor or fragment) that must be
+                        successfully paired in order to attempt to estimate measurement error
+                        distribution.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="min-peak-pairs">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+        </row>
+        <row>
+            <cell>
+                <label>
+                    <content parameter="min-scan-frag-peaks"/>
+                    <tooltip id="hmin-scan-frag-peaks">
+                        Minimum fragment peaks an MS/MS scan must contain to be used in measurement 
+                        error estimation.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="min-scan-frag-peaks">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+            <cell>
+                <label>
+                    <content parameter="top-n-frag-peaks"/>
+                    <tooltip id="htop-n-frag-peaks">
+                        Number of most-intense fragment peaks to consider for measurement error
+                        estimation, per MS/MS spectrum.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="top-n-frag-peaks">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+            <cell>
+                <label>
+                    <content parameter="min-common-frag-peaks"/>
+                    <tooltip id="hmin-common-frag-peaks">
+                        Number of the most-intense peaks that two spectra must share in order to
+                        potentially be generated by the same peptide, for measurement error
+                        estimation.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="min-common-frag-peaks">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+            <cell>
+                <label>
+                    <content parameter="pair-top-n-frag-peaks"/>
+                    <tooltip id="hpair-top-n-frag-peaks">
+                        Number of fragment peaks per spectrum pair to be used in fragment error
+                        estimation.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="pair-top-n-frag-peaks">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+        </row>
+        <row>
+            <cell colspan="8">
+                <input type="hidden" parameter="param_medic_mod_percent"/>
+            </cell>
+        </row>
+    </block>
+</interface>

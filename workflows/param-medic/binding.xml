@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<binding>
+    <bind action="begin" type="download">
+        <url value="{livesearch.download}"/>
+        <query name="task" valueRef="@task"/>
+        <query name="user" valueRef="@user"/>
+        <compression type="zip"/>
+        <download port="spec" type="folder">
+	    <query name="resource" value="spec"/>
+	</download>
+        <downloadParams>
+            <query name="resource" value="params"/>
+        </downloadParams>
+    </bind>
+    
+    <bind action="split" tool="split_param-medic">
+        <inputAsRequirement port="spec"    requirement="input"/>
+        <productionToOutput port="scripts" production="output"/>
+    </bind>
+
+    <bind action="param-medic" tool="param-medic">
+        <inputAsRequirement port="scripts" requirement="input"/>
+        <inputAsRequirement port="spec"    requirement="spectra"/>
+        <productionToOutput port="log"     production="output"/>
+    </bind>
+    
+    <bind action="merge" tool="mergeLogs">
+        <inputAsRequirement port="log"       requirement="input"/>
+        <productionToOutput port="mergedLog" production="output"/>
+    </bind>
+    
+    <bind action="summarize" tool="summarize_param-medic">
+        <inputAsRequirement port="log"     requirement="input"/>
+        <productionToOutput port="merge"   production="output"/>
+        <productionToOutput port="summary" production="summary"/>
+    </bind>
+    
+    <bind action="end" type="upload">
+        <url value="{livesearch.upload}"/>
+        <query name="task" valueRef="@task"/>
+        <query name="user" valueRef="@user"/>
+        <contentQuery name="content"/>
+        <compression type="zip"/>
+        <upload port="log" type="file">
+            <query name="resource" value="log"/>
+        </upload>
+        <upload port="summary" type="file">
+            <query name="resource" value="summary"/>
+        </upload>
+        <uploadLogs>
+            <query name="resource" value=".logs"/>
+        </uploadLogs>
+    </bind>
+</binding>

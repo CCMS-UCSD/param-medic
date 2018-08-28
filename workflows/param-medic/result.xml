@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<interface id="param-medic" version="1.3.0">
+	<!-- View definitions -->
+	<view id="view_log" label="View Log">
+		<blockRef id="main" type="view_log"/>
+	</view>
+	<view id="param-medic_summary" label="View Summary">
+		<blockRef id="main" type="param-medic_summary"/>
+	</view>
+	
+	<!-- Block definitions -->
+	<block id="view_log" type="table">
+		<data>
+			<source type="file" name="log/"/>
+			<parsers>
+				<parser type="genericTabular">
+					<parameter name="ignoredColumn" value="log"/>
+				</parser>
+			</parsers>
+			<processors>
+				<processor type="uploadFilename" field="_dyn_#filename"/>
+			</processors>
+		</data>
+		<row></row>
+		<row expander="View Job Log" expandericontype="text">
+			<column type="stream" file=".logs/[log]" contentType="text/plain" colspan="30" panelHeight="250px" textAlign="left" backgroundColor="#F0F0F0"/>
+		</row>
+	</block>
+	<block id="param-medic_summary" type="table">
+		<data>
+			<source type="file" name="summary/summary.tsv"/>
+			<parsers>
+				<parser type="genericTabular">
+					<parameter name="ignoredColumn" value="filename"/>
+					<parameter name="ignoredColumn" value="log"/>
+				</parser>
+			</parsers>
+			<!--
+			<processors>
+				<processor type="uploadFilename" field="_dyn_#filename"/>
+			</processors>
+			-->
+		</data>
+		<row></row>
+	</block>
+</interface>

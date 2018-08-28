@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<flow name="param-medic">
+	<collection name="spectrum"/>
+	<collection name="scripts"/>
+	<collection name="log"/>
+	<object     name="mergedLog"/>
+	<object     name="summaryMerge"/>
+	<object     name="summary"/>
+	
+	<action name="begin">
+		<output port="spec" collection="spectrum"/>
+	</action>
+	
+	<action name="split">
+		<input  port="spec"    collection="spectrum"/>
+		<output port="scripts" collection="scripts"/>
+	</action>
+
+	<action name="param-medic" multiplicity="multiple" type="parallel">
+		<input  port="scripts" collection="scripts" transformation="unfolding"/>
+		<input  port="spec"    collection="spectrum"/>
+		<output port="log"     collection="log"/>
+	</action>
+	
+	<action name="merge">
+		<input  port="log"       collection="log"/>
+		<output port="mergedLog" object="mergedLog"/>
+	</action>
+	
+	<action name="summarize">
+		<input  port="log"     collection="log"/>
+		<output port="merge"   object="summaryMerge"/>
+		<output port="summary" object="summary"/>
+	</action>
+
+	<action name="end">
+		<input port="log"     object="mergedLog"/>
+		<input port="summary" object="summary"/>
+	</action>
+</flow>
