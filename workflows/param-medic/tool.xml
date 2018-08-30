@@ -15,7 +15,7 @@
         <pathVar name="param-medic.script"           path="param-medic_wrapper.py"/>
         <pathVar name="summarize_param-medic.script" path="merge_param_medic.py"/>
     </pathSet>
-    
+
     <tool name="split_param-medic">
         <require name="input"  type="folder"/>
         <produce name="output" type="folder"/>
@@ -72,15 +72,21 @@
     
     <tool name="summarize_param-medic">
         <require name="input"   type="folder"/>
+        <require name="parameters"   type="file"/>
+        <require name="msstats_groupmapping"   type="file"/>
         <produce name="output"  type="file" naming="explicit"/>
         <produce name="summary" type="file" naming="fixed" value="summary.tsv"/>
+        <produce name="summary_pergroup" type="file" naming="explicit"/>
 
         <execution env="binary" argConvention="adhoc">
                 <arg pathRef="summarize_param-medic.script"/>
                 <arg valueRef="input"/>
                 <arg valueRef="@param_medic_mod_percent"/>
+                <arg valueRef="parameters"/>
+                <arg valueRef="msstats_groupmapping"/>
                 <arg valueRef="output"/>
                 <arg valueRef="summary"/>
+                <arg valueRef="summary_pergroup"/>
         </execution>
     </tool>
 </toolset>

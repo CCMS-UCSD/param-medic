@@ -8,6 +8,12 @@
         <download port="spec" type="folder">
 	    <query name="resource" value="spec"/>
 	</download>
+        <download port="msstats_groupmapping" type="file">
+            <query name="resource" value="msstats_groupmapping"/>
+        </download>
+        <download port="params" type="file">
+            <query name="resource" value="params"/>
+        </download>
         <downloadParams>
             <query name="resource" value="params"/>
         </downloadParams>
@@ -31,8 +37,11 @@
     
     <bind action="summarize" tool="summarize_param-medic">
         <inputAsRequirement port="log"     requirement="input"/>
+        <inputAsRequirement port="parameters"     requirement="parameters"/>
+        <inputAsRequirement port="msstats_groupmapping"     requirement="msstats_groupmapping"/>
         <productionToOutput port="merge"   production="output"/>
         <productionToOutput port="summary" production="summary"/>
+        <productionToOutput port="summary_pergroup" production="summary_pergroup"/>
     </bind>
     
     <bind action="end" type="upload">
@@ -46,6 +55,9 @@
         </upload>
         <upload port="summary" type="file">
             <query name="resource" value="summary"/>
+        </upload>
+        <upload port="summary_pergroup" type="file">
+            <query name="resource" value="summary_pergroup"/>
         </upload>
         <uploadLogs>
             <query name="resource" value=".logs"/>

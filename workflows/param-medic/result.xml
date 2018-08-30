@@ -7,6 +7,9 @@
 	<view id="param-medic_summary" label="View Summary">
 		<blockRef id="main" type="param-medic_summary"/>
 	</view>
+	<view id="param-medic_summary_pergroup" label="View Per-Group Summary">
+		<blockRef id="main" type="param-medic_summary_pergroup"/>
+	</view>
 	
 	<!-- Block definitions -->
 	<block id="view_log" type="table">
@@ -32,6 +35,22 @@
 			<parsers>
 				<parser type="genericTabular">
 					<parameter name="ignoredColumn" value="filename"/>
+					<parameter name="ignoredColumn" value="log"/>
+				</parser>
+			</parsers>
+			<!--
+			<processors>
+				<processor type="uploadFilename" field="_dyn_#filename"/>
+			</processors>
+			-->
+		</data>
+		<row></row>
+	</block>
+	<block id="param-medic_summary_pergroup" type="table">
+		<data>
+			<source type="file" name="summary_pergroup/"/>
+			<parsers>
+				<parser type="genericTabular">
 					<parameter name="ignoredColumn" value="log"/>
 				</parser>
 			</parsers>

@@ -10,6 +10,9 @@
 	    <validator type="required"/>
 	    <fileGenerator type="upload" purpose="spectrum" target="spec"/>
 	</parameter>
+        <parameter name="msstats_groupmapping" label="Annotation File">
+            <fileGenerator type="upload" purpose="parameters" target="msstats_groupmapping"/>
+        </parameter>
 	<!-- Advanced Param-Medic command line parameters -->
 	<parameter name="min-precursor-mz" label="Minimum Precursor m/z Value">
 	    <validator type="float" required="false"/>
@@ -81,6 +84,19 @@
 		</module>
 	    </cell>
         </row>
+                <row>
+                    <cell>
+                        <label>
+                            <content parameter="msstats_groupmapping"/>
+                            <tooltip id="msstats_groupmapping_tooltip">CSV file with the headers Run, Condition, BioReplicate, and Experiment. Run column should contain filename. Files will be grouped based on their combination of Condition, BioReplicate, and Experiment.</tooltip>
+                        </label>
+                    </cell>
+                    <cell colspan="3">
+                        <module id="msstats_groupmapping" type="fileSelector">
+                            <property name="label">Annotation File</property>
+                        </module>
+                    </cell>
+                </row>
     </block>
     <block label="Advanced Param-Medic Parameters">
         <row>
