@@ -10,6 +10,9 @@
 	<view id="param-medic_summary_pergroup" label="View Per-Group Summary">
 		<blockRef id="main" type="param-medic_summary_pergroup"/>
 	</view>
+	<view id="param-medic_stats_pergroup" label="View Per-Group Stats">
+		<blockRef id="main" type="param-medic_stats_pergroup"/>
+	</view>
 	
 	<!-- Block definitions -->
 	<block id="view_log" type="table">
@@ -62,4 +65,12 @@
 		</data>
 		<row></row>
 	</block>
+        <block id="param-medic_stats_pergroup" type="stream">
+                <data>
+                        <source type="file" name="stats_pergroup/"/>
+                        <parsers>
+                                <parser type="stream" contentType="text/html"/>
+                        </parsers>
+                </data>
+        </block>
 </interface>

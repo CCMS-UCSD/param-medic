@@ -10,8 +10,8 @@
 	    <validator type="required"/>
 	    <fileGenerator type="upload" purpose="spectrum" target="spec"/>
 	</parameter>
-        <parameter name="msstats_groupmapping" label="Annotation File">
-            <fileGenerator type="upload" purpose="parameters" target="msstats_groupmapping"/>
+        <parameter name="annotation" label="Annotation File">
+            <fileGenerator type="upload" purpose="parameters" target="annotation"/>
         </parameter>
 	<!-- Advanced Param-Medic command line parameters -->
 	<parameter name="min-precursor-mz" label="Minimum Precursor m/z Value">
@@ -63,9 +63,13 @@
 	    <default   value="5"/>
 	</parameter>
 	<!-- Param-Medic summary script parameters -->
-	<parameter name="param_medic_mod_percent" label="Percent Files to Include Mod">
+	<parameter name="param_medic_mod_percent_present" label="Min Percent Files to Consider Mod Present">
 	    <validator type="float" minimum="0" maximum="100" required="true"/>
 	    <default   value="80"/>
+	</parameter>
+	<parameter name="param_medic_mod_percent_absent" label="Max Percent Files to Consider Mod Absent">
+	    <validator type="float" minimum="0" maximum="100" required="true"/>
+	    <default   value="10"/>
 	</parameter>
     </parameters>
 
@@ -87,12 +91,12 @@
                 <row>
                     <cell>
                         <label>
-                            <content parameter="msstats_groupmapping"/>
-                            <tooltip id="msstats_groupmapping_tooltip">CSV file with the headers Run, Condition, BioReplicate, and Experiment. Run column should contain filename. Files will be grouped based on their combination of Condition, BioReplicate, and Experiment.</tooltip>
+                            <content parameter="annotation"/>
+                            <tooltip id="annotation_tooltip">CSV file with the headers Run, Condition, BioReplicate, and Experiment. Run column should contain filename. Files will be grouped based on their combination of Condition, BioReplicate, and Experiment.</tooltip>
                         </label>
                     </cell>
                     <cell colspan="3">
-                        <module id="msstats_groupmapping" type="fileSelector">
+                        <module id="annotation" type="fileSelector">
                             <property name="label">Annotation File</property>
                         </module>
                     </cell>
@@ -274,8 +278,31 @@
             </cell>
         </row>
         <row>
-            <cell colspan="8">
-                <input type="hidden" parameter="param_medic_mod_percent"/>
+            <cell>
+                <label>
+                    <content parameter="param_medic_mod_percent_present"/>
+                    <tooltip id="param_medic_mod_percent_present_tooltip">
+                        Minimum percentage of files for which Param-Medic must find that a modification occurs, in order to consider it unambiguously present.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="param_medic_mod_percent_present">
+                    <attribute name="size" value="4"/>
+                </input>
+            </cell>
+            <cell>
+                <label>
+                    <content parameter="param_medic_mod_percent_absent"/>
+                    <tooltip id="param_medic_mod_percent_absent_tooltip">
+                        Maximum percentage of files for which Param-Medic must find that a modification occurs, in order to consider it unambiguously absent.
+                    </tooltip>
+                </label>
+            </cell>
+            <cell>
+                <input type="text" parameter="param_medic_mod_percent_absent">
+                    <attribute name="size" value="4"/>
+                </input>
             </cell>
         </row>
     </block>

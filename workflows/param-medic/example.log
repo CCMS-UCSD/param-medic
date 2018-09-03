@@ -1,0 +1,8 @@
+DEBUG      workflow_validator:87 ======================Error List==============================
+DEBUG      workflow_validator:90 Tool not found for flow: split should be named: split_param-medic
+DEBUG      workflow_validator:90 Tool not found for flow: param-medic should be named: param-medic
+DEBUG      workflow_validator:90 Tool not found for flow: merge should be named: mergeLogs
+DEBUG      workflow_validator:90 Tool not found for flow: summarize should be named: summarize_param-medic
+DEBUG      workflow_validator:87 ======================Error List==============================
+DEBUG      workflow_validator:87 ======================Error List==============================
+DEBUG      workflow_validator:87 ======================Error List==============================

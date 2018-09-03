@@ -2,18 +2,19 @@
 <flow name="param-medic">
 	<object     name="parameters"/>
 	<collection name="spectrum"/>
-	<object name="msstats_groupmapping"/>
+	<object name="annotation"/>
 	<collection name="scripts"/>
 	<collection name="log"/>
 	<object     name="mergedLog"/>
 	<object     name="summaryMerge"/>
 	<object     name="summary"/>
 	<object     name="summary_pergroup"/>
+	<object     name="stats_pergroup"/>
 	
 	<action name="begin">
 	        <output port="params" object="parameters"/>
 		<output port="spec" collection="spectrum"/>
-		<output port="msstats_groupmapping"     object="msstats_groupmapping"/>
+		<output port="annotation"     object="annotation"/>
 	</action>
 	
 	<action name="split">
@@ -35,15 +36,17 @@
 	<action name="summarize">
 		<input  port="log"     collection="log"/>
 		<input  port="parameters"     object="parameters"/>
-		<input  port="msstats_groupmapping"     object="msstats_groupmapping"/>
+		<input  port="annotation"     object="annotation"/>
 		<output port="merge"   object="summaryMerge"/>
 		<output port="summary" object="summary"/>
 		<output port="summary_pergroup" object="summary_pergroup"/>
+		<output port="stats_pergroup" object="stats_pergroup"/>
 	</action>
 
 	<action name="end">
 		<input port="log"     object="mergedLog"/>
 		<input port="summary" object="summary"/>
 		<input port="summary_pergroup" object="summary_pergroup"/>
+		<input port="stats_pergroup" object="stats_pergroup"/>
 	</action>
 </flow>
