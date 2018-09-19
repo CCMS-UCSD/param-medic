@@ -87,22 +87,24 @@ def main():
         )
         for u, g in enumerate(all_groups):
             out_f.write('<p><b>%s</b>:<br>' % g)
-            mods_present = 0
-            mods_absent = 0
-            mods_ambiguous = 0
+            mods_present = []
+            mods_absent = []
+            mods_ambiguous = []
             for i, y in enumerate(out_display_values_per_group[g]):
                 categ = param_medic_header[i]
                 if categ.endswith('_present'):
                     mod_status = y[0]
                     if mod_status == 'T':
-                        mods_present += 1
+                        mods_present.append(categ)
                     elif mod_status == 'F':
-                        mods_absent += 1
+                        mods_absent.append(categ)
                     elif mod_status == '?':
-                        mods_ambiguous += 1
+                        mods_ambiguous.append(categ)
             out_f.write(
-                '%d present, %d absent, %d ambigious</p>' % (
-                    mods_present, mods_absent, mods_ambiguous
+                '%d present%s<br>%d absent%s<br>%d ambigious%s</p>' % (
+                    len(mods_present), ' (%s)' % ', '.join(mods_present) if mods_present else '',
+                    len(mods_absent), ' (%s)' % ', '.join(mods_absent) if mods_absent else '',
+                    len(mods_ambiguous), ' (%s)' % ', '.join(mods_ambiguous) if mods_ambiguous else ''
                 )
             )
             out_f.write('</body></html>')
@@ -147,7 +149,7 @@ def get_file_mapping(parameters_fname):
 
 def read_in_annotation_file(annotation_fname, mangled_to_orig_fname):
     groupname_per_file = {}
-    annotation_cols = ['Run', 'Condition', 'BioReplicate', 'Experiment']
+    annotation_cols = ['Run', 'Condition']#, 'BioReplicate', 'Experiment']
     with open(annotation_fname) as f:
         f_lines = [z.strip() for z in re.split('[\n\r]', f.read()) if z.strip()]
         if len(f_lines) < 1:
@@ -163,13 +165,14 @@ def read_in_annotation_file(annotation_fname, mangled_to_orig_fname):
         for line in f_lines[1:]:
             line = line.split(',')
             annot_file_fname = line[header.index('Run')]
-            groupname = re.sub(
-                '\\s', '_', '%s.%s.%s' % (
-                    line[header.index('Condition')],
-                    line[header.index('BioReplicate')],
-                    line[header.index('Experiment')]
-                )
-            )
+            #groupname = re.sub(
+            #    '\\s', '_', '%s.%s.%s' % (
+            #        line[header.index('Condition')],
+            #        line[header.index('BioReplicate')],
+            #        line[header.index('Experiment')]
+            #    )
+            #)
+            groupname = re.sub('\\s', '_', line[header.index('Condition')])
             if (
                 annot_file_fname in groupname_per_file and
                 groupname_per_file[annot_file_fname] != groupname
@@ -258,5 +261,6 @@ def raise_exception(error_message):
 
 if __name__ == '__main__':
     sys.exit(main()) 
+
 
 

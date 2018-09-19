@@ -54,6 +54,7 @@
 			<source type="file" name="summary_pergroup/"/>
 			<parsers>
 				<parser type="genericTabular">
+					<parameter name="ignoredColumn" value="filename"/>
 					<parameter name="ignoredColumn" value="log"/>
 				</parser>
 			</parsers>
