@@ -31,6 +31,8 @@ def main():
             param_medic_values_d['filename'] if
             (z in mangled_to_orig_fname)
         ]
+    #print param_medic_values_d
+
     # overall summary
     out_values, out_display_values = get_summary(
         param_medic_values_d, param_medic_header, min_percent_files_mod_present,
@@ -61,8 +63,8 @@ def main():
     all_groups = sorted(set(groupname_per_file.values()))
     for groupname in all_groups:
         group_indices = []  # find indices in param_medic_values_d that apply to this group
-        for annot_fname in groupname_per_file:
-            if groupname_per_file[annot_fname] != groupname:
+        for annot_fname, channel in groupname_per_file:
+            if groupname_per_file[(annot_fname, channel)] != groupname:
                 continue
             for i, param_medic_fname in enumerate(param_medic_values_d['filename']):
                 if filenames_match(param_medic_fname, os.path.basename(annot_fname)):
@@ -155,7 +157,12 @@ def read_in_annotation_file(annotation_fname, mangled_to_orig_fname):
         if len(f_lines) < 1:
             raise_exception('Invalid annotation file')
         header = f_lines[0]
-        if ',' not in header:
+        if (
+            annotation_fname.endswith('.xls') or
+            annotation_fname.endswith('.xlsx') or
+            annotation_fname.endswith('.tsv') or
+            ',' not in header
+        ):
             raise_exception('Annotation file does not appear to be a CSV file.')
         header = header.split(',')
         for c in annotation_cols:
@@ -172,16 +179,19 @@ def read_in_annotation_file(annotation_fname, mangled_to_orig_fname):
             #        line[header.index('Experiment')]
             #    )
             #)
-            groupname = re.sub('\\s', '_', line[header.index('Condition')])
+            channel = None
+            if 'Channel' in header:
+                channel = re.sub('\\s', '_', line[header.index('Channel')].strip())
+            groupname = re.sub('\\s', '_', line[header.index('Condition')].strip())
             if (
-                annot_file_fname in groupname_per_file and
-                groupname_per_file[annot_file_fname] != groupname
+                (annot_file_fname, channel) in groupname_per_file and
+                groupname_per_file[(annot_file_fname, channel)] != groupname
             ):
                 raise_exception(
-                    'Filename %s appears multiple times in Run column of '
-                    'annotation file' % annot_file_fname
+                    'Filename %s with channel %s appears multiple times in '
+                    'annotation file' % (annot_file_fname, channel)
                 )
-            groupname_per_file[annot_file_fname] = groupname
+            groupname_per_file[(annot_file_fname, channel)] = groupname
     return groupname_per_file
 
 

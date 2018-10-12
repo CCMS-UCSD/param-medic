@@ -32,7 +32,7 @@
 	</parameter>
 	<parameter name="max-precursor-delta-ppm" label="Maximum Precursor Delta (ppm)">
 	    <validator type="float" required="false"/>
-	    <default   value="50"/>
+	    <default   value="2500"/>
 	</parameter>
 	<parameter name="charges" label="Precursor Charge State to Consider">
 	    <validator type="required"/>
@@ -44,19 +44,19 @@
 	</parameter>
 	<parameter name="min-peak-pairs" label="Minimum Peak Pairs">
 	    <validator type="integer" required="false"/>
-	    <default   value="100"/>
+	    <default   value="10"/>
 	</parameter>
 	<parameter name="min-scan-frag-peaks" label="Minimum Scan Fragment Peaks">
 	    <validator type="integer" required="false"/>
-	    <default   value="40"/>
+	    <default   value="20"/>
 	</parameter>
 	<parameter name="top-n-frag-peaks" label="Number of Most-Intense Fragment Peaks to Consider">
 	    <validator type="integer" required="false"/>
-	    <default   value="30"/>
+	    <default   value="20"/>
 	</parameter>
 	<parameter name="min-common-frag-peaks" label="Minimum Common Fragment Peaks">
 	    <validator type="integer" required="false"/>
-	    <default   value="20"/>
+	    <default   value="10"/>
 	</parameter>
 	<parameter name="pair-top-n-frag-peaks" label="Number of Fragment Peaks Per Spectrum Pair">
 	    <validator type="integer" required="false"/>

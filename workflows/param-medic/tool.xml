@@ -13,12 +13,9 @@
     
     <pathSet base="param-medic/0.2">
         <pathVar name="param-medic.script"           path="param-medic_wrapper.py"/>
-    </pathSet>
-    
-    <pathSet base="param-medic_test/0.2">
         <pathVar name="summarize_param-medic.script" path="merge_param_medic.py"/>
     </pathSet>
-
+    
     <tool name="split_param-medic">
         <require name="input"  type="folder"/>
         <produce name="output" type="folder"/>
